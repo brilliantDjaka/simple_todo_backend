@@ -1,4 +1,4 @@
-const { BadRequestError } = require('restify-errors')
+const { BadRequestError, NotFoundError } = require('restify-errors')
 const TodoModel = require('../../models/Todo');
 const {  isNullOrUndefined } = require('util');
 const { ObjectId } = require('mongodb');
@@ -11,6 +11,7 @@ let findData = async (req, res) => {
     let todo = await TodoModel.findById(ObjectId(_id)).exec().catch(err => {
         res.send(new Error(err.toString()))
     })
+    if(isNullOrUndefined(todo)) res.send(new NotFoundError('data not found'))
     res.send({
         data:{
             ...todo._doc
