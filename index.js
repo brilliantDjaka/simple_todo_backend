@@ -12,7 +12,7 @@ server.use(restify.plugins.queryParser());
 server.get('/', respond);
 server.post('/todo',insertTodo);
 server.del('/todo',deleteTodo);
-server.get('/todo/:_id',findData)
+server.get('/todo',findData)
 
 server.listen(process.env.PORT ||  8080, function () {
     console.log('%s listening at %s', server.name, server.url);
