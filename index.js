@@ -1,3 +1,4 @@
+require('dotenv').config();
 var restify = require('restify');
 const { insertTodo, deleteTodo } = require('./modules/Todo/TodoCommand')
 const { findData } = require('./modules/Todo/TodoQuery')
