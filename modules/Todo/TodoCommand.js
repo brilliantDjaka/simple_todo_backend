@@ -21,24 +21,30 @@ let insertTodo = async (req, res) => {
         res.send(new Error(err.toString()))
     })
     res.send({
-        data:{
-            _id:todo._id
+        data: {
+            _id: todo._id
         },
         message: 'success insert data'
     });
 }
 
-let deleteTodo = async (req, res, _next) => {
-    const { _id } = req.body;
+let deleteTodo = async (req, res, next) => {
+    const { _id } = req.params;
 
     if (
         isNullOrUndefined(_id)
     ) res.send(new BadRequestError('text, isCheck, author is required'));
     let todo = await TodoModel.findById(ObjectId(_id)).catch(err => {
-        res.send(new Error(err.toString()))
+        next(new Error(err.toString()))
+        return;
     })
+    if (isNullOrUndefined(todo)) {
+        next(new Error());
+        return;
+    }
     await todo.remove().catch(err => {
-        res.send(new Error(err.toString()))
+        next(new Error(err.toString()))
+        return;
     });
     res.send({
         message: 'success delete data'

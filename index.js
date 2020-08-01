@@ -11,7 +11,7 @@ server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
 server.get('/', respond);
 server.post('/todo',insertTodo);
-server.del('/todo',deleteTodo);
+server.del('/todo/:_id',deleteTodo);
 server.get('/todo',findData)
 
 server.listen(process.env.PORT ||  8080, function () {
