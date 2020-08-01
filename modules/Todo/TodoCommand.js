@@ -51,8 +51,32 @@ let deleteTodo = async (req, res, next) => {
     });
 }
 
+let checkTodo = async (req, res, next) => {
+    const { _id } = req.params;
+
+    if (
+        isNullOrUndefined(_id)
+    ) res.send(new BadRequestError('_id is required'));
+    let todo = await TodoModel.findById(ObjectId(_id)).catch(err => {
+        next(new Error(err.toString()))
+        return;
+    })
+    if (isNullOrUndefined(todo)) {
+        next(new Error());
+        return;
+    }
+    todo.isCheck = !todo.isCheck;
+    await todo.save().catch(err => {
+        next(new Error(err.toString()))
+        return;
+    });
+    res.send({
+        message: 'success check data'
+    });
+}
 
 module.exports = {
     insertTodo,
-    deleteTodo
+    deleteTodo,
+    checkTodo
 }
