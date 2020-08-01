@@ -11,9 +11,9 @@ let insertTodo = async (req, res, _next) => {
         isNullOrUndefined(author)
     ) res.send(new BadRequestError('text, isCheck, author is required'));
     let todo = new TodoModel({
-        text: 'test',
-        isCheck: true,
-        author: 'brian'
+        text: text,
+        isCheck: isCheck,
+        author: author
     });
     await todo.save().catch(err => {
         res.send(new Error(err.toString()))
