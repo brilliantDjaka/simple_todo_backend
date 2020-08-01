@@ -14,7 +14,8 @@
     "dotenv": "^8.2.0",
     "mongodb": "^3.6.0",
     "mongoose": "^5.9.27",
-    "restify": "^8.5.1"
+    "restify": "^8.5.1",
+    "restify-cors-middleware": "^1.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
