@@ -1,5 +1,6 @@
 var restify = require('restify');
 const { insertTodo, deleteTodo } = require('./modules/Todo/TodoCommand')
+const { findData } = require('./modules/Todo/TodoQuery')
 function respond(_req, res, next) {
     res.send('server is running properly');
     next();
@@ -10,6 +11,7 @@ server.use(restify.plugins.queryParser());
 server.get('/', respond);
 server.post('/todo',insertTodo);
 server.del('/todo',deleteTodo);
+server.get('/todo/:_id',findData)
 
 server.listen(8080, function () {
     console.log('%s listening at %s', server.name, server.url);

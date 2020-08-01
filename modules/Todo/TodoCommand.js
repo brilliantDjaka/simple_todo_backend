@@ -3,22 +3,27 @@ const TodoModel = require('../../models/Todo');
 const { isNull, isNullOrUndefined } = require('util');
 const { ObjectId } = require('mongodb');
 
-let insertTodo = async (req, res, _next) => {
-    const { text, isCheck, author } = req.body;
+let insertTodo = async (req, res) => {
+    const { text, isChecked, author } = req.body;
     if (
         isNullOrUndefined(text) ||
-        isNullOrUndefined(isCheck) ||
+        isNullOrUndefined(isChecked) ||
         isNullOrUndefined(author)
-    ) res.send(new BadRequestError('text, isCheck, author is required'));
+    ) {
+        res.send(new BadRequestError('text, isCheck, author is required'));
+    }
     let todo = new TodoModel({
         text: text,
-        isCheck: isCheck,
+        isCheck: isChecked,
         author: author
     });
-    await todo.save().catch(err => {
+    todo = await todo.save().catch(err => {
         res.send(new Error(err.toString()))
     })
     res.send({
+        data:{
+            _id:todo._id
+        },
         message: 'success insert data'
     });
 }
