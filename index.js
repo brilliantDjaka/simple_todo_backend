@@ -20,7 +20,7 @@ server.use(cors.actual);
 server.get('/', respond);
 server.post('/todo',insertTodo);
 server.post('/todo/delete-many',deleteTodo);
-server.get('/todo',findData)
+server.get('/todo/:author',findData)
 server.post('/todo/check/:_id',checkTodo);
 
 server.listen(process.env.PORT ||  8080, function () {
