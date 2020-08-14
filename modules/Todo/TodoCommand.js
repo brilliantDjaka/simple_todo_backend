@@ -1,6 +1,6 @@
 const { BadRequestError } = require('restify-errors')
 const TodoModel = require('../../models/Todo');
-const { isNull, isNullOrUndefined } = require('util');
+const { isNull, isNullOrUndefined, isArray } = require('util');
 const { ObjectId } = require('mongodb');
 
 let insertTodo = async (req, res) => {
@@ -29,23 +29,24 @@ let insertTodo = async (req, res) => {
 }
 
 let deleteTodo = async (req, res, next) => {
-    const { _id } = req.params;
-
-    if (
-        isNullOrUndefined(_id)
-    ) res.send(new BadRequestError('text, isCheck, author is required'));
-    let todo = await TodoModel.findById(ObjectId(_id)).catch(err => {
+    let { _id } = req.body;
+    if(!isArray(_id)){
+        res.send(new BadRequestError('text, isCheck, author is required'))   
+    }
+    try {
+        _id = _id.map(v=>ObjectId(v));
+    } catch (error) {
+        res.send(new BadRequestError('cant convert into object id'))
+    }
+    await TodoModel.deleteMany({
+        _id:{
+            "$in":_id
+        }
+    }).catch(err => {
         next(new Error(err.toString()))
         return;
     })
-    if (isNullOrUndefined(todo)) {
-        next(new Error());
-        return;
-    }
-    await todo.remove().catch(err => {
-        next(new Error(err.toString()))
-        return;
-    });
+   
     res.send({
         message: 'success delete data'
     });

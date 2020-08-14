@@ -19,7 +19,7 @@ server.pre(cors.preflight);
 server.use(cors.actual);  
 server.get('/', respond);
 server.post('/todo',insertTodo);
-server.del('/todo/:_id',deleteTodo);
+server.post('/todo/delete-many',deleteTodo);
 server.get('/todo',findData)
 server.post('/todo/check/:_id',checkTodo);
 
