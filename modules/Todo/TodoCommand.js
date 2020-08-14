@@ -1,6 +1,6 @@
 const { BadRequestError } = require('restify-errors')
 const TodoModel = require('../../models/Todo');
-const { isNull, isNullOrUndefined, isArray } = require('util');
+const { isNull, isNullOrUndefined, isArray, isString } = require('util');
 const { ObjectId } = require('mongodb');
 
 let insertTodo = async (req, res) => {
@@ -29,19 +29,12 @@ let insertTodo = async (req, res) => {
 }
 
 let deleteTodo = async (req, res, next) => {
-    let { _id } = req.body;
-    if(!isArray(_id)){
-        res.send(new BadRequestError('text, isCheck, author is required'))   
-    }
-    try {
-        _id = _id.map(v=>ObjectId(v));
-    } catch (error) {
-        res.send(new BadRequestError('cant convert into object id'))
-    }
+    let { author } = req.params;
+    
+    if(!isString(author)) next(new BadRequestError("author is required"))
     await TodoModel.deleteMany({
-        _id:{
-            "$in":_id
-        }
+        author:author,
+        isCheck:true
     }).catch(err => {
         next(new Error(err.toString()))
         return;
